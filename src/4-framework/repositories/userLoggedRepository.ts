@@ -1,5 +1,5 @@
 import { IUserLoggedRepository, IUserLoggedRepositoryToken } from '#application/repositories/iUserLoggedRepository'
-import { UserLogged } from '#enterprise/entities/userLogged'
+import { UserLogged } from '#enterprise/domain/userLogged'
 import { Service } from 'typedi'
 import { UserLoggedModel } from '#framework/models/userLoggedModel'
 

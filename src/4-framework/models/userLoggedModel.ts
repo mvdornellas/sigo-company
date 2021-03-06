@@ -1,5 +1,5 @@
 import dynamoose, { ModelConstructor, Schema } from 'dynamoose'
-import { UserLogged } from '#enterprise/entities/userLogged'
+import { UserLogged } from '#enterprise/domain/userLogged'
 
 export type UserLoggedDataSchema = UserLogged
 export type UserLoggedKeySchema = Pick<UserLogged, 'connectionId'>

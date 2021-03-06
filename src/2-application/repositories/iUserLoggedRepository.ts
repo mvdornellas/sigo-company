@@ -1,4 +1,4 @@
-import { UserLogged } from '#enterprise/entities/userLogged'
+import { UserLogged } from '#enterprise/domain/userLogged'
 import { Token } from 'typedi/Token'
 
 export interface IUserLoggedRepository {

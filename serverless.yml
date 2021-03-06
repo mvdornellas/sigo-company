@@ -100,12 +100,11 @@ provider:
     # MYSQL_PORT: 3306
     # CART_MAX_NUMBER: 1000000
     # PRINTER_WS_URL: ${ssm:/comanda-agil/${self:provider.stage}/printer/ws/url}
-  websocketApiName: user-logged-${self:provider.stage}
-  websocketApiRouteSelectionExpression: $request.body.action
+  # websocketApiName: user-logged-${self:provider.stage}
+  # websocketApiRouteSelectionExpression: $request.body.action
 functions: 
-  #Printer
-  connectUserLogged: ${file(${self:custom.functionsDirectory}/printer/_handlers.yml):connectPrinter}
-  disconnectUserLogged: ${file(${self:custom.functionsDirectory}/printer/_handlers.yml):disconnectPrinter}
+  # connectUserLogged: ${file(${self:custom.functionsDirectory}/printer/_handlers.yml):connectPrinter}
+  # disconnectUserLogged: ${file(${self:custom.functionsDirectory}/printer/_handlers.yml):disconnectPrinter}
 
 plugins:
   - serverless-stage-manager   
@@ -114,3 +113,20 @@ plugins:
   - serverless-offline
   - serverless-pseudo-parameters
   - serverless-plugin-warmup
+
+
+
+
+# functions:
+#   create:
+#     handler: posts.create
+#     events:
+#       - http:
+#           path: posts/create
+#           method: post
+#           integration: lambda
+#           authorizer:
+#             arn: arn:aws:cognito-idp:us-east-1:xxx:userpool/us-east-1_ZZZ
+#             claims:
+#               - email
+#               - nickname
