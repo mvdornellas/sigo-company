@@ -4,6 +4,9 @@ package:
   individually: true
 
 custom:
+  company: 
+    sns:
+      name: CompanyCreated
   warmup:
     enabled: false # Whether to warm up functions by default or not
     folderName: '_warmup' # Name of the folder created for the generated warmup 
@@ -65,6 +68,10 @@ provider:
       Resource: '*'
     - Effect: Allow
       Action:
+        - sqs:ReceiveMessage
+      Resource: 'arn:aws:sqs:#{AWS::Region}:#{AWS::AccountId}:*'
+    - Effect: Allow
+      Action:
         - dynamodb:DescribeTable
         - dynamodb:Query
         - dynamodb:GetItem
@@ -81,12 +88,6 @@ provider:
         - dynamodb:ListStreams
         - dynamodb:Scan
       Resource: 'arn:aws:dynamodb:#{AWS::Region}:#{AWS::AccountId}:table/*'
-    - Effect: Allow
-      Action:
-        - "execute-api:ManageConnections"
-        - "execute-api:Invoke"
-      Resource:
-        - "arn:aws:execute-api:*:*:**/@connections/*"
   package:
     excludeDevDependencies: true
     exclude:
@@ -94,6 +95,8 @@ provider:
       - .vscode/**
   environment:
     STAGE: ${self:provider.stage}
+    ACCOUNT_ID: '#{AWS::AccountId}'
+    REGION: ${self:provider.region}
 functions: 
   - ${file(${self:custom.functionsDirectory}/company/_handlers.yml)}
 plugins:
@@ -103,9 +106,12 @@ plugins:
   - serverless-offline
   - serverless-pseudo-parameters
   - serverless-plugin-warmup
-
-
-
+resources:
+  Resources:
+    CompanyCreatedSns:
+      Type: AWS::SNS::Topic
+      Properties:
+        TopicName: ${self:custom.company.sns.name}
 
 # functions:
 #   create:

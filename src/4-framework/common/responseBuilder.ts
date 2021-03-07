@@ -10,6 +10,11 @@ class ResponseBuilder {
     console.info('[I] BODY RESPONSE', output)
     return {
       statusCode: success ? 200 : 500,
+      headers: {
+        'Access-Control-Allow-Origin' : '*', // Required for CORS support to work
+        'Access-Control-Allow-Credentials' : true, // Required for cookies, authorization headers with HTTPS
+        'Content-Type': 'application/json'
+      },
       body: JSON.stringify(output)
     } as BaseResponse
 

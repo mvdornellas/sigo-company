@@ -17,6 +17,7 @@
   "license": "MIT",
   "dependencies": {
     "@types/uuid": "^8.3.0",
+    "aws-sdk": "^2.858.0",
     "dynamoose": "^1.11.1",
     "lodash": "^4.17.21",
     "moment": "^2.24.0",

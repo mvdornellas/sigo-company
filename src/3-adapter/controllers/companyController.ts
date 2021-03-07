@@ -26,7 +26,7 @@ export class CompanyController {
         startHire,
         endHire
       } as CompanyDto)
-      return { data: true }
+      return new OutputBase<boolean>()
     } catch (error) {
       console.error(`[E] CREATE COMPANY`, error)
       return {
@@ -41,7 +41,7 @@ export class CompanyController {
     try {
       const companies = await this.getAllCompanyUseCase.run()
       console.info('[I] COMPANIES DATA', companies)
-      return {
+      return new OutputBase({
         data: companies.map(({ id, name, email, cnpj, startHire, endHire, createdAt, updatedAt }: CompanyDto) => {
           return {
             id,
@@ -54,15 +54,13 @@ export class CompanyController {
             updatedAt: updatedAt
           } as GetAllCompanyOutput
         })
-      }
-
+      })
     } catch (error) {
       console.error(`[E] GET ALL COMPANY`, error)
-      return {
+      return new OutputBase({
         success: false,
-        data: {},
         errors: error
-      }
+      })
     }
 
   }
