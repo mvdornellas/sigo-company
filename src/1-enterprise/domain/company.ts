@@ -9,7 +9,7 @@ export class Company extends Entity {
   createdAt?: string
   updatedAt?: string
 
-  constructor (obj: Partial<Company) {
+  constructor (obj: Partial<Company>) {
     super()
     Object.assign(this,obj)
   }
