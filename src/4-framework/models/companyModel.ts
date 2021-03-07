@@ -1,8 +1,9 @@
+import { BaseDataSchema, BaseKeySchema } from '#framework/models/baseModel'
 import dynamoose, { ModelConstructor, Schema, SchemaAttributes } from 'dynamoose'
 import { Company } from '#enterprise/domain/company'
 
-export type CompanyDataSchema = Company
-export type CompanyKeySchema = Pick<Company, any>
+export type CompanyDataSchema = BaseDataSchema<Company>
+export type CompanyKeySchema = BaseKeySchema
 
 export type CompanySchema = ModelConstructor<
   CompanyDataSchema,
@@ -10,17 +11,17 @@ export type CompanySchema = ModelConstructor<
 >
 
 const schema = {
-  companyId: {
+  pk: {
     type: String,
     required: true,
     hashKey: true
   },
-  standardId: {
+  sk: {
     type: String,
     required: true,
     rangeKey: true
   },
-  standardName: {
+  id: {
     type: String,
     required: true
   },
@@ -45,11 +46,6 @@ const schema = {
     type: String,
     required: true
   },
-  rating: {
-    type: Number,
-    required: false,
-    default: 0
-  },
   createdAt: {
     type: String,
     default: new Date()
@@ -63,7 +59,7 @@ const schema = {
 export const CompanyModel: CompanySchema = dynamoose.model<
   CompanyDataSchema,
   CompanyKeySchema>(
-    'Company',
+    'SIGO',
     new Schema(schema, {
       timestamps: true,
       saveUnknown: true,

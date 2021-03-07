@@ -1,13 +1,11 @@
-export class Company {
-  companyId!: string
-  standardId!: string
-  standardName!: string
+import { Entity } from '#enterprise/domain/entity'
+export class Company extends Entity {
+  id!: string
   name!: string
   cnpj!: number
   email!: string
   startHire!: string
   endHire!: string
-  rating?: number
   createdAt?: string
   updatedAt?: string
 }
