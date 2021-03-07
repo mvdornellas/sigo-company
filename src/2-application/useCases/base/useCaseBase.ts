@@ -1,5 +1,3 @@
-import { Entity } from '#enterprise/domain/entity'
-
-export interface UseCaseBase {
-  run (input: {}): Promise<Entity | Array<Entity> | void | {}>
+export interface UseCaseBase<T> {
+  run (input: any): Promise<T>
 }

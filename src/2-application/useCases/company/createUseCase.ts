@@ -1,18 +1,17 @@
 import { ICompanyRepository, ICompanyRepositoryToken } from '#application/repositories/iCompanyRepository'
 import { Inject, Service } from 'typedi'
 import _ from 'lodash'
+import { v4 as uuid } from 'uuid'
 import { CompanyDto } from '#application/dto/company'
 import { Company } from '#enterprise/domain/company'
-import { IStandardService, IStandardServiceToken } from '#application/services/iStandardService'
+import { UseCaseBase } from '#application/useCases/base/useCaseBase'
 
 @Service()
-export class CreateCompanyUseCase {
+export class CreateCompanyUseCase implements UseCaseBase<boolean> {
+
   @Inject(ICompanyRepositoryToken) private readonly companyRepository!: ICompanyRepository
 
-  @Inject(IStandardServiceToken) private readonly standardService!: IStandardService
-
   async run ({
-      id,
       cnpj,
       email,
       endHire,
@@ -21,8 +20,8 @@ export class CreateCompanyUseCase {
       standards
   }: CompanyDto): Promise<boolean> {
 
-    const { id: companyId } = await this.companyRepository.create({
-      id,
+    const companyCreated = await this.companyRepository.create({
+      id: uuid(),
       cnpj,
       email,
       endHire,
@@ -30,13 +29,7 @@ export class CreateCompanyUseCase {
       startHire
     } as Company)
 
-    for (const { id,name } of standards) {
-      await this.standardService.create({
-        id,
-        name,
-        companyId
-      })
-    }
+    console.info('[I] COMPANY CREATED DATA', JSON.stringify(companyCreated))
 
     return true
   }

@@ -1,15 +1,18 @@
+import { OutputBase } from '#adapter/outputBase'
 type BaseResponse = {
   statusCode: number;
   body: string;
 }
 
 class ResponseBuilder {
-  build (response: any, statusCode?: number): BaseResponse {
-    console.info('RESPONSE: ', response)
+  build (output: OutputBase<any>): BaseResponse {
+    const { success } = output
+    console.info('[I] BODY RESPONSE', output)
     return {
-      statusCode: statusCode || 200,
-      body: JSON.stringify(response)
+      statusCode: success ? 200 : 500,
+      body: JSON.stringify(output)
     } as BaseResponse
+
   }
 }
 

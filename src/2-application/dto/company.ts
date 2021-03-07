@@ -1,12 +1,14 @@
 import uuid from 'uuid'
 
 export class CompanyDto {
-  id: string = uuid.v4()
+  id?: string
   name!: string
   email!: string
   cnpj!: number
   startHire!: string
   endHire!: string
+  createdAt!: string
+  updatedAt!: string
   standards!: StandardDto[]
 }
 

@@ -3,7 +3,8 @@ import { IStandardService, IStandardServiceToken } from '#application/services/i
 
 @Service({ id: IStandardServiceToken })
 export class StandardRepository implements IStandardService {
-  async create (company: any): Promise<any> {
-    const id = `COMPANY#${company.id}`
+  async create (standard: any): Promise<any> {
+    throw new Error('Method not implemented.')
   }
+
 }

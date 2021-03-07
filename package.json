@@ -11,7 +11,7 @@
     "deploy:prod": "serverless deploy --stage prod",
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "tslint --project tsconfig.json -t verbose",
-    "typecheck": "clear && tsc --noEmit"
+    "typecheck": "tsc --noEmit"
   },
   "author": "",
   "license": "MIT",

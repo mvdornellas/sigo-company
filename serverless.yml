@@ -5,10 +5,10 @@ package:
 
 custom:
   warmup:
-    enabled: true # Whether to warm up functions by default or not
+    enabled: false # Whether to warm up functions by default or not
     folderName: '_warmup' # Name of the folder created for the generated warmup 
     cleanFolder: false
-    memorySize: 256
+    memorySize: 128
     package:
       individually: true
       exclude: # exclude additional binaries that are included at the serverless package level
@@ -17,7 +17,7 @@ custom:
       include:
         - ./**
     timeout: 20
-    prewarm: true # Run WarmUp immediately after a deploymentlambda
+    prewarm: false # Run WarmUp immediately after a deploymentlambda
   functionsDirectory: src/4-framework/functions
   webpack:
     webpackConfig: './webpack.config.js'   # Name of webpack configuration file
@@ -40,6 +40,8 @@ provider:
   stage: ${opt:stage, 'dev'}
   region: ${opt:region, 'us-east-2'}
   profile: ${opt:profile, 'portal-sigo'}
+  memorySize: 128
+  timeout: 30
   iamRoleStatements:
     - Effect: Allow
       Action:
@@ -85,7 +87,6 @@ provider:
         - "execute-api:Invoke"
       Resource:
         - "arn:aws:execute-api:*:*:**/@connections/*"
-  timeout: 30
   package:
     excludeDevDependencies: true
     exclude:
@@ -93,19 +94,8 @@ provider:
       - .vscode/**
   environment:
     STAGE: ${self:provider.stage}
-    # MYSQL_HOST: ${ssm:/comanda-agil/${self:provider.stage}/mysql/host}
-    # MYSQL_USER: ${ssm:/comanda-agil/${self:provider.stage}/mysql/user}
-    # MYSQL_PASSWORD: ${ssm:/comanda-agil/${self:provider.stage}/mysql/password~true}
-    # MYSQL_DATABASE: ${ssm:/comanda-agil/${self:provider.stage}/mysql/database}
-    # MYSQL_PORT: 3306
-    # CART_MAX_NUMBER: 1000000
-    # PRINTER_WS_URL: ${ssm:/comanda-agil/${self:provider.stage}/printer/ws/url}
-  # websocketApiName: user-logged-${self:provider.stage}
-  # websocketApiRouteSelectionExpression: $request.body.action
 functions: 
-  # connectUserLogged: ${file(${self:custom.functionsDirectory}/printer/_handlers.yml):connectPrinter}
-  # disconnectUserLogged: ${file(${self:custom.functionsDirectory}/printer/_handlers.yml):disconnectPrinter}
-
+  - ${file(${self:custom.functionsDirectory}/company/_handlers.yml)}
 plugins:
   - serverless-stage-manager   
   - serverless-api-compression

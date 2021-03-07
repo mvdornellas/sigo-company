@@ -1,0 +1,15 @@
+createCompany:
+    handler: ${self:custom.functionsDirectory}/company/create.handler
+    events:
+      - http:
+          path: api/company
+          method: POST
+          cors: true  
+
+getAllCompany:
+    handler: ${self:custom.functionsDirectory}/company/getAll.handler
+    events:
+      - http:
+          path: api/company
+          method: GET
+          cors: true  

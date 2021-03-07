@@ -1,34 +1,28 @@
+import { Company } from '#enterprise/domain/company'
 import { ICompanyRepository, ICompanyRepositoryToken } from '#application/repositories/iCompanyRepository'
 import { Inject, Service } from 'typedi'
 import _ from 'lodash'
-import { CompanyDto, StandardDto } from '#application/dto/company'
+import { CompanyDto } from '#application/dto/company'
+import { UseCaseBase } from '#application/useCases/base/useCaseBase'
 
 @Service()
-export class GetAllCompanyUseCase {
+export class GetAllCompanyUseCase implements UseCaseBase<CompanyDto[]> {
   @Inject(ICompanyRepositoryToken) private readonly companyRepository!: ICompanyRepository
 
   async run (): Promise<CompanyDto[]> {
     const companies = await this.companyRepository.getAll()
-    return _.chain(companies)
-    .groupBy('companyId')
-    .map((value, _key) => {
-      const { companyId, name, email, cnpj, startHire, endHire } = value[0]
+    return companies.map(({ id, name, cnpj, email, endHire, startHire, createdAt, updatedAt }: Company) => {
       return {
-        id: companyId,
+        id,
         name,
-        email,
         cnpj,
-        startHire,
+        email,
         endHire,
-        standards: value.map(company => {
-          return {
-            id: company.standardId,
-            name: company.standardName,
-            rating: company.rating
-          } as StandardDto
-        })
+        startHire,
+        createdAt,
+        updatedAt
       } as CompanyDto
     })
-    .value()
+
   }
 }
