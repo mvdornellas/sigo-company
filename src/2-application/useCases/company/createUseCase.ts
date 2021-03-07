@@ -5,20 +5,22 @@ import { v4 as uuid } from 'uuid'
 import { CompanyDto } from '#application/dto/company'
 import { Company } from '#enterprise/domain/company'
 import { UseCaseBase } from '#application/useCases/base/useCaseBase'
+import { INotificationService, INotificationServiceToken } from '#application/services/iNotificationService'
 
 @Service()
-export class CreateCompanyUseCase implements UseCaseBase<boolean> {
+export class CreateCompanyUseCase implements UseCaseBase<Company> {
 
   @Inject(ICompanyRepositoryToken) private readonly companyRepository!: ICompanyRepository
+
+  @Inject(INotificationServiceToken) private readonly notificationService!: INotificationService
 
   async run ({
       cnpj,
       email,
       endHire,
       name,
-      startHire,
-      standards
-  }: CompanyDto): Promise<boolean> {
+      startHire
+  }: CompanyDto): Promise<Company> {
 
     const companyCreated = await this.companyRepository.create({
       id: uuid(),
@@ -31,6 +33,12 @@ export class CreateCompanyUseCase implements UseCaseBase<boolean> {
 
     console.info('[I] COMPANY CREATED DATA', JSON.stringify(companyCreated))
 
-    return true
+    const notification = await this.notificationService.send(JSON.stringify({
+      companyCreated
+    }))
+
+    console.info('[I] SEND NOTIFICATION MESSAGE', notification)
+
+    return companyCreated
   }
 }

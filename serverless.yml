@@ -108,10 +108,43 @@ plugins:
   - serverless-plugin-warmup
 resources:
   Resources:
-    CompanyCreatedSns:
+    CompanyCreatedTopic:
       Type: AWS::SNS::Topic
       Properties:
         TopicName: ${self:custom.company.sns.name}
+    
+    EmailQueue:
+      Type: AWS::SQS::Queue
+      Properties:
+        QueueName: EmailQueue
+        MessageRetentionPeriod: 864000 #10 days in retention message
+        VisibilityTimeout: 300 #5 minutes
+
+    EmailQueuePolicy:
+      Type: AWS::SQS::QueuePolicy
+      Properties:
+        PolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+            -
+              Effect: Allow
+              Principal: "*"
+              Action: SQS:SendMessage
+              Resource: 
+                - Fn::GetAtt: [EmailQueue, Arn]
+              Condition:
+                ArnEquals:
+                  aws:SourceArn: arn:aws:sns:#{AWS::Region}:#{AWS::AccountId}:${self:custom.company.sns.name}
+        Queues:
+          - Ref: EmailQueue
+
+    CompanyCreatedSubscription:
+      Type: AWS::SNS::Subscription
+      Properties:
+          Protocol: sqs
+          Endpoint:   
+            Fn::GetAtt: [EmailQueue, Arn]
+          TopicArn: arn:aws:sns:#{AWS::Region}:#{AWS::AccountId}:${self:custom.company.sns.name}
 
 # functions:
 #   create:

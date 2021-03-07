@@ -6,27 +6,25 @@ import { GetAllCompanyUseCase } from '#application/useCases/company/getAllUseCas
 import { CreateCompanyInput } from '#adapter/serializers/company/createInput'
 import { GetAllCompanyOutput } from '#adapter/serializers/company/getAllOutput'
 import { OutputBase } from '#adapter/outputBase'
+import { CreateCompanyOutput } from '#adapter/serializers/company/createOutput'
+import { SendCompanyEmailInput } from '#adapter/serializers/company/sendEmailInput'
+import { SendCompanyEmailUseCase } from '#application/useCases/company/sendEmailUseCase'
 
 @Service()
 export class CompanyController {
-  @Inject()
-  private readonly createCompanyUseCase!: CreateCompanyUseCase
+  @Inject() private readonly createCompanyUseCase!: CreateCompanyUseCase
 
-  @Inject()
-  private readonly getAllCompanyUseCase!: GetAllCompanyUseCase
+  @Inject() private readonly getAllCompanyUseCase!: GetAllCompanyUseCase
 
-  async create (input: CreateCompanyInput): Promise<OutputBase<boolean>> {
+  @Inject() private readonly sendCompanyEmailUseCase!: SendCompanyEmailUseCase
+
+  async create (input: CreateCompanyInput): Promise<OutputBase<CreateCompanyOutput>> {
     try {
-      const { name, cnpj, email, startHire, endHire } = input
       console.info(`[I] COMPANY CREATE INPUT`, input)
-      await this.createCompanyUseCase.run({
-        name,
-        cnpj,
-        email,
-        startHire,
-        endHire
-      } as CompanyDto)
-      return new OutputBase<boolean>()
+      const companyCreated = await this.createCompanyUseCase.run(new CompanyDto(input))
+      return new OutputBase<CreateCompanyOutput>({
+        data: companyCreated
+      })
     } catch (error) {
       console.error(`[E] CREATE COMPANY`, error)
       return {
@@ -63,6 +61,15 @@ export class CompanyController {
       })
     }
 
+  }
+
+  async sendEmail (input: SendCompanyEmailInput): Promise<any> {
+    try {
+      console.info('[I] SEND EMAIL DATA', input)
+      return this.sendCompanyEmailUseCase.run(input)
+    } catch (error) {
+      console.error(`[E] SEND EMAIL TO COMPANY`, error)
+    }
   }
 
 }

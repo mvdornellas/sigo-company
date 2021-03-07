@@ -8,4 +8,9 @@ export class Company extends Entity {
   endHire!: string
   createdAt?: string
   updatedAt?: string
+
+  constructor (obj: Partial<Company) {
+    super()
+    Object.assign(this,obj)
+  }
 }

@@ -1,5 +1,3 @@
-import uuid from 'uuid'
-
 export class CompanyDto {
   id?: string
   name!: string
@@ -10,6 +8,10 @@ export class CompanyDto {
   createdAt!: string
   updatedAt!: string
   standards!: StandardDto[]
+
+  constructor (obj: Partial<CompanyDto>) {
+    Object.assign(this,obj)
+  }
 }
 
 export type StandardDto = {
