@@ -1,8 +1,8 @@
 import { IEmailService, IEmailServiceToken } from '#application/services/iEmailService'
 import { SES } from 'aws-sdk'
-import { Inject } from 'typedi'
+import { Service } from 'typedi'
 
-@Inject(IEmailServiceToken)
+@Service({ id: IEmailServiceToken })
 export class EmailService implements IEmailService {
   private readonly resource: SES
   constructor () {

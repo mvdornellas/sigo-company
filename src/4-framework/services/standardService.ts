@@ -1,10 +1,20 @@
+import { BaseService, SERVICES } from '#framework/services/baseService'
 import { Service } from 'typedi'
 import { IStandardService, IStandardServiceToken } from '#application/services/iStandardService'
 
 @Service({ id: IStandardServiceToken })
-export class StandardRepository implements IStandardService {
-  async create (standard: any): Promise<any> {
-    throw new Error('Method not implemented.')
+export class StandardRepository extends BaseService implements IStandardService {
+  constructor () {
+    super(SERVICES.STANDARD)
+  }
+  async create (companyId: number, standards: [{
+    id: string,
+    name: string
+  }]): Promise<any> {
+    return this.axios.post<boolean>(`/standard`, {
+      companyId,
+      standards
+    })
   }
 
 }

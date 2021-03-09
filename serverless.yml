@@ -4,6 +4,8 @@ package:
   individually: true
 
 custom:
+  cognito: 
+    userPoolId: us-east-2_5gbXUpBoO
   company: 
     sns:
       name: CompanyCreated
@@ -118,7 +120,7 @@ resources:
       Properties:
         QueueName: EmailQueue
         MessageRetentionPeriod: 864000 #10 days in retention message
-        VisibilityTimeout: 300 #5 minutes
+        VisibilityTimeout: 60
 
     EmailQueuePolicy:
       Type: AWS::SQS::QueuePolicy

@@ -1,8 +1,8 @@
 import { INotificationService, INotificationServiceToken } from '#application/services/iNotificationService'
 import { SNS } from 'aws-sdk'
-import { Inject } from 'typedi'
+import { Service } from 'typedi'
 
-@Inject(INotificationServiceToken)
+@Service({ id: INotificationServiceToken })
 export class NotificationService implements INotificationService {
   private readonly resource: SNS
   constructor () {
