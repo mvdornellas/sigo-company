@@ -47,6 +47,9 @@ provider:
   profile: ${opt:profile, 'portal-sigo'}
   memorySize: 128
   timeout: 30
+  apiGateway: 
+    restApiId: ${ssm:restApiId}
+    restApiRootResourceId: ${ssm:restApiRootResourceId}
   iamRoleStatements:
     - Effect: Allow
       Action:
