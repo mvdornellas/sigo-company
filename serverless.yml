@@ -1,11 +1,9 @@
 
-service: sigo-acessorias-e-consultorias
+service: sigo-company
 package:
   individually: true
 
 custom:
-  cognito: 
-    userPoolId: us-east-2_5gbXUpBoO
   company: 
     sns:
       name: CompanyCreated

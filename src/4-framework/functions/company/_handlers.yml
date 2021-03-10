@@ -9,12 +9,8 @@ createCompany:
           method: POST
           cors: true  
           authorizer:
-            type: COGNITO_USER_POOLS 
-            arn: arn:aws:cognito-idp:#{AWS::Region}:#{AWS::AccountId}:userpool/${self:custom.cognito.userPoolId}
-            resultTtlInSeconds: 0
-            identitySource: method.request.header.Authorization
-            identityValidationExpression: .*
-            name: Cognito
+            type: COGNITO_USER_POOLS
+            authorizerId: ${ssm:restApiCognitoAuthorizerId}
 
 getAllCompany:
     handler: ${self:custom.functionsDirectory}/company/getAll.handler
@@ -24,12 +20,8 @@ getAllCompany:
           method: GET
           cors: true  
           authorizer:
-            type: COGNITO_USER_POOLS 
-            arn: arn:aws:cognito-idp:#{AWS::Region}:#{AWS::AccountId}:userpool/${self:custom.cognito.userPoolId}
-            resultTtlInSeconds: 0
-            identitySource: method.request.header.Authorization
-            identityValidationExpression: .*
-            name: Cognito
+            type: COGNITO_USER_POOLS
+            authorizerId: ${ssm:restApiCognitoAuthorizerId}
 
 sendCompanyEmail: 
     timeout: 60
