@@ -1,6 +1,8 @@
+import { Standard } from '#enterprise/domain/standard'
 import { Entity } from '#enterprise/domain/entity'
+import { v4 as uuid } from 'uuid'
+
 export class Company extends Entity {
-  id!: string
   name!: string
   cnpj!: number
   email!: string
@@ -8,9 +10,12 @@ export class Company extends Entity {
   endHire!: string
   createdAt?: string
   updatedAt?: string
+  standards?: Standard[]
 
   constructor (obj: Partial<Company>) {
     super()
+    obj.id = uuid()
+    obj.standards = obj.standards!.map(standard => new Standard(standard))
     Object.assign(this,obj)
   }
 }

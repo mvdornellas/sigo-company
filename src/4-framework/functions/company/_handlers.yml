@@ -1,4 +1,4 @@
-createCompany:
+create:
     handler: ${self:custom.functionsDirectory}/company/create.handler
     environment:
       COMPANY_CREATED_SNS: arn:aws:sns:#{AWS::Region}:#{AWS::AccountId}:${self:custom.company.sns.name} 
@@ -11,7 +11,7 @@ createCompany:
             type: COGNITO_USER_POOLS
             authorizerId: ${ssm:restApiCognitoAuthorizerId}
 
-getAllCompany:
+getAll:
     handler: ${self:custom.functionsDirectory}/company/getAll.handler
     events:
       - http:
@@ -22,7 +22,7 @@ getAllCompany:
             type: COGNITO_USER_POOLS
             authorizerId: ${ssm:restApiCognitoAuthorizerId}
 
-sendCompanyEmail: 
+sendEmail: 
     timeout: 60
     handler: ${self:custom.functionsDirectory}/company/sendEmail.handler
     events:

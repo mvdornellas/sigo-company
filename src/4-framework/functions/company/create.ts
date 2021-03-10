@@ -8,9 +8,6 @@ import { CreateCompanyInput } from '#adapter/serializers/company/createInput'
 export const handler: Handler = async (event: APIGatewayEvent) => {
   const body = JSON.parse(event.body || '{}')
   console.log(`[I] BODY REQUEST`, body)
-  const { name, email, cnpj, startHire, endHire } = body
   const companyController = Container.get(CompanyController)
-  return responseBuilder.build(await companyController.create({
-    name, email, cnpj, startHire, endHire
-  } as CreateCompanyInput))
+  return responseBuilder.build(await companyController.create(new CreateCompanyInput(body)))
 }

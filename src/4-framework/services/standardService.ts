@@ -3,7 +3,7 @@ import { Service } from 'typedi'
 import { IStandardService, IStandardServiceToken } from '#application/services/iStandardService'
 
 @Service({ id: IStandardServiceToken })
-export class StandardRepository extends BaseService implements IStandardService {
+export class StandardService extends BaseService implements IStandardService {
   constructor () {
     super(SERVICES.STANDARD)
   }

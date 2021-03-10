@@ -14,8 +14,10 @@ export class CompanyDto {
   }
 }
 
-export type StandardDto = {
-  id: string,
-  name: string,
-  rating?: number
+export class StandardDto {
+  id!: string
+  name!: string
+  constructor (obj: Partial<StandardDto>) {
+    Object.assign(this,obj)
+  }
 }
