@@ -1,5 +1,5 @@
 
-service: sigo-company
+service: sigo-companies
 package:
   individually: true
 
@@ -100,6 +100,7 @@ provider:
     STAGE: ${self:provider.stage}
     ACCOUNT_ID: '#{AWS::AccountId}'
     REGION: ${self:provider.region}
+    REST_API_BASE_URL: ${ssm:restApiBaseUrl}
 functions: 
   - ${file(${self:custom.functionsDirectory}/company/_handlers.yml)}
 plugins:
@@ -148,17 +149,3 @@ resources:
           Endpoint:   
             Fn::GetAtt: [EmailQueue, Arn]
           TopicArn: arn:aws:sns:#{AWS::Region}:#{AWS::AccountId}:${self:custom.company.sns.name}
-
-# functions:
-#   create:
-#     handler: posts.create
-#     events:
-#       - http:
-#           path: posts/create
-#           method: post
-#           integration: lambda
-#           authorizer:
-#             arn: arn:aws:cognito-idp:us-east-1:xxx:userpool/us-east-1_ZZZ
-#             claims:
-#               - email
-#               - nickname
