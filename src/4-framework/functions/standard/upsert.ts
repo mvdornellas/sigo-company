@@ -1,5 +1,5 @@
-import { StandardController } from '#adapter/controllers/standardController'
 import 'reflect-metadata'
+import { StandardController } from '#adapter/controllers/standardController'
 import { APIGatewayEvent, Handler } from 'aws-lambda'
 import Container from 'typedi'
 import builder from '#framework/common/builder'
