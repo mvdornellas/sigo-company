@@ -4,8 +4,8 @@ type BaseResponse = {
   body: string;
 }
 
-class ResponseBuilder {
-  build (output: OutputBase<any>): BaseResponse {
+class Builder {
+  response (output: OutputBase<any>): BaseResponse {
     const { success } = output
     console.info('[I] BODY RESPONSE', output)
     return {
@@ -21,4 +21,4 @@ class ResponseBuilder {
   }
 }
 
-export default new ResponseBuilder()
+export default new Builder()

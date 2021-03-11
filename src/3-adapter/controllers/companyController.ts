@@ -9,6 +9,10 @@ import { OutputBase } from '#adapter/outputBase'
 import { CreateCompanyOutput } from '#adapter/serializers/company/createOutput'
 import { SendCompanyEmailInput } from '#adapter/serializers/company/sendEmailInput'
 import { SendCompanyEmailUseCase } from '#application/useCases/company/sendEmailUseCase'
+import _ from 'lodash'
+import { UpsertStandardUseCase } from '#application/useCases/standard/upsertUseCase'
+import { StandardDto } from '#application/dto/standard'
+import { DeleteCompanyUseCase } from '#application/useCases/company/deleteUseCase'
 
 @Service()
 export class CompanyController {
@@ -18,10 +22,24 @@ export class CompanyController {
 
   @Inject() private readonly sendCompanyEmailUseCase!: SendCompanyEmailUseCase
 
+  @Inject() private readonly upsertStandardUseCase!: UpsertStandardUseCase
+
+  @Inject() private readonly deleteCompanyUseCase!: DeleteCompanyUseCase
+
   async create (input: CreateCompanyInput): Promise<OutputBase<CreateCompanyOutput>> {
     try {
       console.info(`[I] COMPANY CREATE INPUT`, input)
       const companyCreated = await this.createCompanyUseCase.run(new CompanyDto(input))
+
+      companyCreated.standards = await this.upsertStandardUseCase.run({
+          companyId: companyCreated.id,
+          standards: input.standards!.map(standard => new StandardDto(standard))
+        }).catch(async rollback => {
+          console.info(`[E] ROLLBACK CREATE COMPANY`, rollback)
+          await this.deleteCompanyUseCase.run(companyCreated.id)
+          throw new Error(JSON.stringify(rollback))
+        })
+
       return new OutputBase<CreateCompanyOutput>({
         data: companyCreated
       })
@@ -40,18 +58,7 @@ export class CompanyController {
       const companies = await this.getAllCompanyUseCase.run()
       console.info('[I] COMPANIES DATA', companies)
       return new OutputBase({
-        data: companies.map(({ id, name, email, cnpj, startHire, endHire, createdAt, updatedAt }: CompanyDto) => {
-          return {
-            id,
-            name,
-            email,
-            cnpj,
-            startHire: startHire,
-            endHire: endHire,
-            createdAt: createdAt,
-            updatedAt: updatedAt
-          } as GetAllCompanyOutput
-        })
+        data: _.sortBy(companies,['name'],['asc']).map(company => new GetAllCompanyOutput(company))
       })
     } catch (error) {
       console.error(`[E] GET ALL COMPANY`, error)

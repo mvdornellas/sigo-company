@@ -103,6 +103,8 @@ provider:
     REST_API_BASE_URL: ${ssm:restApiBaseUrl}
 functions: 
   - ${file(${self:custom.functionsDirectory}/company/_handlers.yml)}
+  - ${file(${self:custom.functionsDirectory}/standard/_handlers.yml)}
+
 plugins:
   - serverless-stage-manager   
   - serverless-api-compression

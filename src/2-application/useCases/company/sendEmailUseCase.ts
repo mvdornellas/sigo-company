@@ -1,6 +1,5 @@
 import { Company } from '#enterprise/domain/company'
 import { Service } from 'typedi'
-import _ from 'lodash'
 import { UseCaseBase } from '#application/useCases/base/useCaseBase'
 
 @Service()

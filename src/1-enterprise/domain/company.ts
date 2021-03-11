@@ -15,7 +15,6 @@ export class Company extends Entity {
   constructor (obj: Partial<Company>) {
     super()
     obj.id = uuid()
-    obj.standards = obj.standards!.map(standard => new Standard(standard))
     Object.assign(this,obj)
   }
 }
