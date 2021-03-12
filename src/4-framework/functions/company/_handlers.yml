@@ -4,7 +4,7 @@ create:
       COMPANY_CREATED_SNS: arn:aws:sns:#{AWS::Region}:#{AWS::AccountId}:${self:custom.company.sns.name} 
     events:
       - http:
-          path: api/companies
+          path: companies
           method: POST
           cors: true  
           authorizer:
@@ -15,7 +15,7 @@ getAll:
     handler: ${self:custom.functionsDirectory}/company/getAll.handler
     events:
       - http:
-          path: api/companies
+          path: companies
           method: GET
           cors: true  
           authorizer:

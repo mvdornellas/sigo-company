@@ -1,8 +1,8 @@
-getAllStandard:
+getAllCompanyStandard:
     handler: ${self:custom.functionsDirectory}/standard/getAll.handler
     events:
       - http:
-          path: api/companies/{companyId}/standards
+          path: companies/{companyId}/standards
           method: GET
           cors: true  
           request:
@@ -13,11 +13,11 @@ getAllStandard:
             type: COGNITO_USER_POOLS
             authorizerId: ${ssm:restApiCognitoAuthorizerId}
 
-updateAllStandard:
+updateCompanyAllStandard:
     handler: ${self:custom.functionsDirectory}/standard/upsert.handler
     events:
       - http:
-          path: api/companies/{companyId}/standards
+          path: companies/{companyId}/standards
           method: PUT
           cors: true  
           request:
