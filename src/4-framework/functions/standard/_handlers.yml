@@ -12,18 +12,3 @@ getAllCompanyStandard:
           authorizer:
             type: COGNITO_USER_POOLS
             authorizerId: ${ssm:restApiCognitoAuthorizerId}
-
-updateCompanyAllStandard:
-    handler: ${self:custom.functionsDirectory}/standard/upsert.handler
-    events:
-      - http:
-          path: companies/{companyId}/standards
-          method: PUT
-          cors: true  
-          request:
-            parameters:
-              paths:
-                companyId: true
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId: ${ssm:restApiCognitoAuthorizerId}

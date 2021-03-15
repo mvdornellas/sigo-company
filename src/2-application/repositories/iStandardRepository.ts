@@ -2,7 +2,8 @@ import { Standard } from '#enterprise/domain/standard'
 import { Token } from 'typedi/Token'
 
 export interface IStandardRepository {
-  upsert (companyId: string, standards: Standard[]): Promise<Standard[]>
+  create (companyId: string, standards: Standard): Promise<Standard>
+  update (companyId: string, standard: Standard): Promise<Standard>
   getAll (companyId: string): Promise<Standard[]>
 }
 

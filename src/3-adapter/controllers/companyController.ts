@@ -8,35 +8,27 @@ import { GetAllCompanyOutput } from '#adapter/serializers/company/getAllOutput'
 import { OutputBase } from '#adapter/outputBase'
 import { CreateCompanyOutput } from '#adapter/serializers/company/createOutput'
 import _ from 'lodash'
-import { UpsertStandardUseCase } from '#application/useCases/standard/upsertUseCase'
+import { CreateStandardUseCase } from '#application/useCases/standard/createUseCase'
 import { StandardDto } from '#application/dto/standard'
-import { DeleteCompanyUseCase } from '#application/useCases/company/deleteUseCase'
-
 @Service()
 export class CompanyController {
   @Inject() private readonly createCompanyUseCase!: CreateCompanyUseCase
 
   @Inject() private readonly getAllCompanyUseCase!: GetAllCompanyUseCase
 
-  @Inject() private readonly upsertStandardUseCase!: UpsertStandardUseCase
-
-  @Inject() private readonly deleteCompanyUseCase!: DeleteCompanyUseCase
+  @Inject() private readonly createStandardUseCase!: CreateStandardUseCase
 
   async create (input: CreateCompanyInput): Promise<OutputBase<CreateCompanyOutput>> {
     try {
       console.info(`[I] COMPANY CREATE INPUT`, input)
       const { company, standards } = input
       const companyCreated = await this.createCompanyUseCase.run(new CompanyDto(company))
-
-      await this.upsertStandardUseCase.run({
-        companyId: companyCreated.id,
-        standards: standards.map(standard => new StandardDto(standard))
-      }).catch(async rollback => {
-        console.info(`[E] ROLLBACK CREATE COMPANY`, rollback)
-        await this.deleteCompanyUseCase.run(companyCreated.id)
-        throw new Error(JSON.stringify(rollback))
-      })
-
+      for (const standard of standards) {
+        await this.createStandardUseCase.run({
+          companyId: companyCreated.id,
+          standard: new StandardDto(standard)
+        })
+      }
       return new OutputBase<CreateCompanyOutput>({
         data: new CreateCompanyOutput({ company: companyCreated })
       })

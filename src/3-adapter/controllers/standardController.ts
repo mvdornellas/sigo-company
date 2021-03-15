@@ -1,15 +1,13 @@
-import { UpsertStandardUseCase } from '#application/useCases/standard/upsertUseCase'
+import { CreateStandardUseCase } from '#application/useCases/standard/createUseCase'
 import { OutputBase } from '#adapter/outputBase'
 import { GetAllStandardOutput } from '#adapter/serializers/standard/getAllOutput'
-import { UpsertStandard } from '#adapter/serializers/standard/upsert'
 import { GetAllStandardUseCase } from '#application/useCases/standard/getAllUseCase'
 import { Inject, Service } from 'typedi'
-import { StandardDto } from '#application/dto/standard'
 
 @Service()
 export class StandardController {
   @Inject() private readonly getAllStandardUseCase!: GetAllStandardUseCase
-  @Inject() protected readonly upsertStandardUseCase!: UpsertStandardUseCase
+  @Inject() protected readonly createStandardUseCase!: CreateStandardUseCase
 
   async getAll (companyId: string): Promise<OutputBase<GetAllStandardOutput[]>> {
     try {
@@ -20,21 +18,6 @@ export class StandardController {
       })
     } catch (error) {
       console.error(`[E] GET ALL STANDARDS`, error)
-      return new OutputBase({
-        success: false,
-        errors: error
-      })
-    }
-  }
-
-  async upsert (companyId: string, standards: UpsertStandard[]): Promise<OutputBase<any>> {
-    try {
-      const standardsUpserted = await this.upsertStandardUseCase.run({ companyId, standards: standards.map(standard => new StandardDto(standard)) })
-      return new OutputBase({
-        data: standardsUpserted.map(standard => new UpsertStandard(standard))
-      })
-    } catch (error) {
-      console.error('[E] UPSERT STANDARDS', error)
       return new OutputBase({
         success: false,
         errors: error

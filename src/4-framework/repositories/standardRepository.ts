@@ -8,16 +8,15 @@ export const STANDARD_SK = 'STANDARD'
 
 @Service({ id: IStandardRepositoryToken })
 export class StandardRepository implements IStandardRepository {
-  async upsert (companyId: string, standards: Standard[]): Promise<Standard[]> {
-    const standardsMapped = standards.map(standard => {
-      return {
-        pk: `${COMPANY_PK}#${companyId}`,
-        sk: `${STANDARD_SK}#${standard.id}`,
-        ...standard
-      }
+  async create (companyId: string, standard: Standard): Promise<Standard> {
+    const { id,name } = standard
+    return StandardModel.create({
+      pk: `${COMPANY_PK}#${companyId}`,
+      sk: `${STANDARD_SK}#${standard.id}`,
+      id,
+      name,
+      createdAt: new Date().toISOString()
     })
-    await StandardModel.batchPut(standardsMapped)
-    return standardsMapped
   }
 
   async getAll (companyId: string): Promise<Standard[]> {
@@ -25,8 +24,16 @@ export class StandardRepository implements IStandardRepository {
     .eq(`${COMPANY_PK}#${companyId}`)
     .where('sk')
     .beginsWith(`${STANDARD_SK}`)
-    // .filter('name')
-    // .ascending()
     .exec()
+  }
+
+  async update (companyId: string, { rating, id: standardId }: Standard): Promise<Standard> {
+    return StandardModel.update({
+      pk: `${COMPANY_PK}#${companyId}`,
+      sk: `${STANDARD_SK}#${standardId}`
+    }, {
+      rating,
+      updatedAt: new Date().toISOString()
+    })
   }
 }

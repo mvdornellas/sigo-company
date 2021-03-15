@@ -8,12 +8,12 @@ import { SendEmailComplianceUseCase } from '#application/useCases/compliance/sen
 import { GetAllStandardUseCase } from '#application/useCases/standard/getAllUseCase'
 import { Company } from '#enterprise/domain/company'
 import { Inject, Service } from 'typedi'
-import { UpsertStandardUseCase } from '#application/useCases/standard/upsertUseCase'
+import { UpdateStandardUseCase } from '#application/useCases/standard/updateUseCase'
 
 @Service()
 export class ComplianceController {
   @Inject() private readonly getAllStandardUseCase!: GetAllStandardUseCase
-  @Inject() private readonly upsertStandardUseCase!: UpsertStandardUseCase
+  @Inject() private readonly updateStandardUseCase!: UpdateStandardUseCase
   @Inject() private readonly sendEmailComplianceUseCase!: SendEmailComplianceUseCase
   @Inject() private readonly getCompanyUseCase!: GetCompanyUseCase
 
@@ -48,14 +48,13 @@ export class ComplianceController {
     }
   }
 
-  async assess ({ standards, companyId }: AssessInput) {
+  async assess ({ standards, companyId }: AssessInput): Promise<OutputBase<boolean>> {
     try {
-      console.log(companyId)
-
-      console.log(standards)
-      const standardsUpserted = await this.upsertStandardUseCase.run({ companyId, standards })
-      return new OutputBase<StandardDto[]>({
-        data: standardsUpserted
+      for (const standard of standards) {
+        await this.updateStandardUseCase.run({ companyId, standard })
+      }
+      return new OutputBase<boolean>({
+        data: true
       })
     } catch (error) {
       console.error('[E] ASSESS COMPLIANCE', error)
