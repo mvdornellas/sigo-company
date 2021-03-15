@@ -2,27 +2,21 @@ import { UpsertStandardUseCase } from '#application/useCases/standard/upsertUseC
 import { OutputBase } from '#adapter/outputBase'
 import { GetAllStandardOutput } from '#adapter/serializers/standard/getAllOutput'
 import { UpsertStandard } from '#adapter/serializers/standard/upsert'
-import { GetCompanyUseCase } from '#application/useCases/company/getUseCase'
 import { GetAllStandardUseCase } from '#application/useCases/standard/getAllUseCase'
 import { Inject, Service } from 'typedi'
 import { StandardDto } from '#application/dto/standard'
 
 @Service()
 export class StandardController {
-  @Inject() private readonly getCompanyUseCase!: GetCompanyUseCase
   @Inject() private readonly getAllStandardUseCase!: GetAllStandardUseCase
   @Inject() protected readonly upsertStandardUseCase!: UpsertStandardUseCase
 
   async getAll (companyId: string): Promise<OutputBase<GetAllStandardOutput[]>> {
     try {
-      const company = await this.getCompanyUseCase.run(companyId)
       const standards = await this.getAllStandardUseCase.run(companyId)
       console.info('[I] STANDARDS DATA', standards)
-      return new OutputBase({
-        data: {
-          company,
-          standards: standards.map(standard => new GetAllStandardOutput(standard))
-        }
+      return new OutputBase<GetAllStandardOutput[]>({
+        data: standards.map(standard => new GetAllStandardOutput(standard))
       })
     } catch (error) {
       console.error(`[E] GET ALL STANDARDS`, error)

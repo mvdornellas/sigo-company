@@ -22,10 +22,3 @@ getAll:
             type: COGNITO_USER_POOLS
             authorizerId: ${ssm:restApiCognitoAuthorizerId}
 
-sendEmail: 
-    timeout: 60
-    handler: ${self:custom.functionsDirectory}/company/sendEmail.handler
-    events:
-     - sqs:       
-        arn: arn:aws:sqs:#{AWS::Region}:#{AWS::AccountId}:EmailQueue
-        batchSize: 1

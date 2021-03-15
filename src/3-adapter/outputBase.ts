@@ -1,6 +1,6 @@
 export class OutputBase<T> {
   success?: true | false = true
-  data!: T | any
+  data!: T
   errors?: any
 
   constructor (output?: Partial<OutputBase<T>>) {

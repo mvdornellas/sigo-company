@@ -1,0 +1,33 @@
+sendEmailCompanyCompliance: 
+    handler: ${self:custom.functionsDirectory}/compliance/sendEmail.handler
+    timeout: 60
+    environment:
+      COMPLIANCE_SOURCE_EMAIL: ${ssm:complianceSourceEmail}
+    events:
+     - sqs:       
+        arn: arn:aws:sqs:#{AWS::Region}:#{AWS::AccountId}:${self:custom.company.sqs.name}
+        batchSize: 1
+
+getCompanyCompliance:
+    handler: ${self:custom.functionsDirectory}/compliance/get.handler
+    events:
+      - http:
+          path: companies/{companyId}/compliance
+          method: GET
+          cors: true 
+          request:
+            parameters:
+              paths:
+                companyId: true 
+
+assessCompanyCompliance:
+    handler: ${self:custom.functionsDirectory}/compliance/assess.handler
+    events:
+      - http:
+          path: companies/{companyId}/compliance
+          method: PUT
+          cors: true  
+          request:
+            parameters:
+              paths:
+                companyId: true

@@ -1,4 +1,4 @@
-export class SendCompanyEmailInput {
+export class SendEmailComplianceInput {
   id!: string
   name!: string
   cnpj!: number
@@ -8,7 +8,7 @@ export class SendCompanyEmailInput {
   createdAt?: string
   updatedAt?: string
 
-  constructor (obj: Partial<SendCompanyEmailInput>) {
+  constructor (obj: Partial<SendEmailComplianceInput>) {
     Object.assign(this, obj)
   }
 }

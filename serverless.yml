@@ -7,6 +7,8 @@ custom:
   company: 
     sns:
       name: CompanyCreated
+    sqs:
+      name: CompanyEmailQueue
   warmup:
     enabled: false # Whether to warm up functions by default or not
     folderName: '_warmup' # Name of the folder created for the generated warmup 
@@ -69,6 +71,10 @@ provider:
       Action:
         - sns:Publish
       Resource: '*'
+    - Effect: 'Allow'
+      Action:
+        - ses:SendEmail
+      Resource: '*'
     - Effect: Allow
       Action:
         - sqs:ReceiveMessage
@@ -101,9 +107,12 @@ provider:
     ACCOUNT_ID: '#{AWS::AccountId}'
     REGION: ${self:provider.region}
     REST_API_BASE_URL: ${ssm:restApiBaseUrl}
+    APP_BASE_URL: ${ssm:appBaseUrl}
 functions: 
   - ${file(${self:custom.functionsDirectory}/company/_handlers.yml)}
   - ${file(${self:custom.functionsDirectory}/standard/_handlers.yml)}
+  - ${file(${self:custom.functionsDirectory}/compliance/_handlers.yml)}
+
 
 plugins:
   - serverless-stage-manager   
@@ -122,9 +131,9 @@ resources:
     EmailQueue:
       Type: AWS::SQS::Queue
       Properties:
-        QueueName: EmailQueue
-        MessageRetentionPeriod: 864000 #10 days in retention message
-        VisibilityTimeout: 60
+        QueueName: ${self:custom.company.sqs.name}
+        MessageRetentionPeriod: 600 #1 hour days in retention message
+        VisibilityTimeout: 300
 
     EmailQueuePolicy:
       Type: AWS::SQS::QueuePolicy

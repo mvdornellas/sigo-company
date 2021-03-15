@@ -1,10 +1,8 @@
-export type CreateCompanyOutput = {
-  id: string
-  name: string
-  email: string
-  cnpj: number
-  startHire: string
-  endHire: string
-  createdAt: string
-  updatedAt?: string
+import { CompanyDto } from '#application/dto/company'
+
+export class CreateCompanyOutput {
+  company!: CompanyDto
+  constructor (obj: Partial<CreateCompanyOutput>) {
+    Object.assign(this, obj)
+  }
 }

@@ -7,13 +7,13 @@ import { UseCaseBase } from '#application/useCases/base/useCaseBase'
 import { INotificationService, INotificationServiceToken } from '#application/services/iNotificationService'
 
 @Service()
-export class CreateCompanyUseCase implements UseCaseBase<Company> {
+export class CreateCompanyUseCase implements UseCaseBase<CompanyDto> {
 
   @Inject(ICompanyRepositoryToken) private readonly companyRepository!: ICompanyRepository
 
   @Inject(INotificationServiceToken) private readonly notificationService!: INotificationService
 
-  async run (companyDto: CompanyDto): Promise<Company> {
+  async run (companyDto: CompanyDto): Promise<CompanyDto> {
     console.info('[I] COMPANY CREATE DTO DATA', companyDto)
     const companyCreated = await this.companyRepository.create(new Company(companyDto))
     console.info('[I] COMPANY CREATED DATA', JSON.stringify(companyCreated))
@@ -21,6 +21,6 @@ export class CreateCompanyUseCase implements UseCaseBase<Company> {
       ...companyCreated
     }))
     console.info('[I] NOTIFICATION COMPANY CREATED SENDED', notification)
-    return companyCreated
+    return companyDto
   }
 }

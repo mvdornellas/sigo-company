@@ -1,14 +1,12 @@
-import { StandardDto } from '#application/dto/company'
 export class CompanyDto {
-  id?: string
+  id!: string
   name!: string
   email!: string
   cnpj!: number
   startHire!: string
   endHire!: string
-  createdAt!: string
-  updatedAt!: string
-  standards?: StandardDto[]
+  createdAt?: string
+  updatedAt?: string
 
   constructor (obj: Partial<CompanyDto>) {
     Object.assign(this,obj)

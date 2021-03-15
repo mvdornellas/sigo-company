@@ -8,12 +8,16 @@ export const COMPANY_SK = 'DETAILS'
 
 @Service({ id: ICompanyRepositoryToken })
 export class CompanyRepository implements ICompanyRepository {
-  async create (company: Company): Promise<Company> {
-    delete company.standards
+  async create ({ id, name, email, cnpj, startHire, endHire }: Company): Promise<Company> {
     return CompanyModel.create({
-      pk: `${COMPANY_PK}#${company.id}`,
+      pk: `${COMPANY_PK}#${id}`,
       sk: `${COMPANY_SK}`,
-      ...company
+      id,
+      name,
+      email,
+      cnpj,
+      startHire,
+      endHire
     })
   }
 

@@ -8,36 +8,39 @@ export class EmailService implements IEmailService {
   constructor () {
     this.resource = new SES()
   }
-  async send (email: string, options: {
-    message: {
-      title: ''
-      body: ''
-    }
+  async sendHTML (source: string, destination: string[], message: {
+    subject: string,
+    content: string
   }): Promise<boolean> {
+
+    const { subject, content } = message
+
     const emailSended = await this.resource.sendEmail({
-        Source: 'dornellas13@gmail.com',
+        Source: source,
         Destination: {
-            ToAddresses: ['']
+            ToAddresses: [...destination]
         },
         Message: {
             Subject: {
-                Data: '',
-                Charset: ''
+                Data: subject,
+                Charset: 'UTF-8'
             },
             Body: {
                 Html: {
-                    Data: '',
-                    Charset: ''
+                    Data: content,
+                    Charset: 'UTF-8'
                 }
             }
         }
     }).promise()
 
-    console.info('[I] EMAIL SEND DATA', email)
+    console.info('[I] EMAIL SEND RESPONSE', emailSended)
 
     if (emailSended.$response.error) {
+      console.log('[E] EMAIL ERROR', emailSended.$response.error)
       return false
     }
+
     return true
   }
 
