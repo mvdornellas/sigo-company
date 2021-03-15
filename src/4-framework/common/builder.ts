@@ -10,7 +10,7 @@ class Builder {
     console.info('[I] BODY RESPONSE', output)
     let statusCode = success ? 200 : 500
 
-    if (errors.some((appError: ApplicationError) => appError.code)) {
+    if (errors && errors.some((appError: ApplicationError) => appError.code)) {
       statusCode = 409
     }
 
