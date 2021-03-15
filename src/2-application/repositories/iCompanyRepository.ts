@@ -6,6 +6,7 @@ export interface ICompanyRepository {
   getAll (): Promise<Company[]>
   get (companyId: string): Promise<Company>
   delete (id: string): Promise<void>
+  updateComplianceAssessed (id: string): Promise<Company>
 }
 
 export const ICompanyRepositoryToken = new Token<ICompanyRepository>()

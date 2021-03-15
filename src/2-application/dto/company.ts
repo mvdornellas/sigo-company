@@ -5,6 +5,7 @@ export class CompanyDto {
   cnpj!: number
   startHire!: string
   endHire!: string
+  complianceAssessed!: boolean
   createdAt?: string
   updatedAt?: string
 

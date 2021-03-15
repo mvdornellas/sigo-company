@@ -19,6 +19,7 @@ export class CreateCompanyInput {
       name,
       cnpj: parseInt(cnpj,10),
       email,
+      complianceAssessed: false,
       startHire,
       endHire
     }
@@ -26,11 +27,3 @@ export class CreateCompanyInput {
     this.standards = standards.map(s => new StandardDto(s))
   }
 }
-
-// export class StandardInput {
-//   id!: string
-//   name!: string
-//   constructor (obj: Partial<StandardInput>) {
-//     Object.assign(this,obj)
-//   }
-// }

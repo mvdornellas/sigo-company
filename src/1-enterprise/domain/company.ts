@@ -6,6 +6,7 @@ export class Company extends Entity {
   email!: string
   startHire!: string
   endHire!: string
+  complianceAssessed?: boolean
   createdAt?: string
   updatedAt?: string
 

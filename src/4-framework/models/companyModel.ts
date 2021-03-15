@@ -46,6 +46,11 @@ const schema = {
     type: String,
     required: true
   },
+  complianceAssessed: {
+    type: Boolean,
+    required: false,
+    default: false
+  },
   createdAt: {
     type: String,
     default: new Date()

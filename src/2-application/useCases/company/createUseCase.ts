@@ -1,4 +1,3 @@
-import { IStandardRepository, IStandardRepositoryToken } from '#application/repositories/iStandardRepository'
 import { ICompanyRepository, ICompanyRepositoryToken } from '#application/repositories/iCompanyRepository'
 import { Inject, Service } from 'typedi'
 import { CompanyDto } from '#application/dto/company'

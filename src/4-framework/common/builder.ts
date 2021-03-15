@@ -1,4 +1,4 @@
-import { OutputBase } from '#adapter/outputBase'
+import { OutputBase, ApplicationError } from '#adapter/outputBase'
 type BaseResponse = {
   statusCode: number;
   body: string;
@@ -6,10 +6,16 @@ type BaseResponse = {
 
 class Builder {
   response (output: OutputBase<any>): BaseResponse {
-    const { success } = output
+    const { success, errors } = output
     console.info('[I] BODY RESPONSE', output)
+    let statusCode = success ? 200 : 500
+
+    if (errors.some((appError: ApplicationError) => appError.code)) {
+      statusCode = 409
+    }
+
     return {
-      statusCode: success ? 200 : 500,
+      statusCode,
       headers: {
         'Access-Control-Allow-Origin' : '*', // Required for CORS support to work
         'Access-Control-Allow-Credentials' : true, // Required for cookies, authorization headers with HTTPS
@@ -17,8 +23,8 @@ class Builder {
       },
       body: JSON.stringify(output)
     } as BaseResponse
-
   }
+
 }
 
 export default new Builder()
