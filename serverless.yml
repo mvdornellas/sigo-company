@@ -108,6 +108,7 @@ provider:
     REGION: ${self:provider.region}
     REST_API_BASE_URL: ${ssm:restApiBaseUrl}
     APP_BASE_URL: ${ssm:appBaseUrl}
+    TOKEN_SECRET_KEY: ${ssm:tokenSecretKey}
 functions: 
   - ${file(${self:custom.functionsDirectory}/company/_handlers.yml)}
   - ${file(${self:custom.functionsDirectory}/standard/_handlers.yml)}

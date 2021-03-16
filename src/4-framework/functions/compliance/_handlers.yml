@@ -15,10 +15,16 @@ getCompanyCompliance:
           path: companies/{companyId}/compliance
           method: GET
           cors: true 
+          authorizer:
+            arn: arn:aws:lambda:#{AWS::Region}:#{AWS::AccountId}:function:sigo-cross-cutting-dev-tokenAuthorizer
+            type: request
+            identitySource: method.request.querystring.token
           request:
             parameters:
               paths:
-                companyId: true 
+                companyId: true
+              queryStrings:
+                token: true 
 
 assessCompanyCompliance:
     handler: ${self:custom.functionsDirectory}/compliance/assess.handler
@@ -27,7 +33,13 @@ assessCompanyCompliance:
           path: companies/{companyId}/compliance
           method: PUT
           cors: true  
+          authorizer:
+            arn: arn:aws:lambda:#{AWS::Region}:#{AWS::AccountId}:function:sigo-cross-cutting-dev-tokenAuthorizer
+            type: request
+            identitySource: method.request.querystring.token
           request:
             parameters:
               paths:
                 companyId: true
+              queryStrings:
+                token: true
