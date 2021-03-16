@@ -1,26 +1,30 @@
 import { Service } from 'typedi'
 import { IStandardRepository, IStandardRepositoryToken } from '#application/repositories/iStandardRepository'
 import { Standard } from '#enterprise/domain/standard'
-import { StandardModel } from '#framework/models/standardModel'
+import { Model } from '#framework/models/model'
 import { COMPANY_PK } from '#framework/repositories/companyRepository'
-
 export const STANDARD_SK = 'STANDARD'
 
 @Service({ id: IStandardRepositoryToken })
 export class StandardRepository implements IStandardRepository {
-  async create (companyId: string, standard: Standard): Promise<Standard> {
-    const { id,name } = standard
-    return StandardModel.create({
-      pk: `${COMPANY_PK}#${companyId}`,
-      sk: `${STANDARD_SK}#${standard.id}`,
-      id,
-      name,
-      createdAt: new Date().toISOString()
+  async create (companyId: string, standards: Standard[]): Promise<Standard[]> {
+    const standardsInserted = standards.map(({ id, name }: Standard) => {
+      return {
+        pk: `${COMPANY_PK}#${companyId}`,
+        sk: `${STANDARD_SK}#${id}`,
+        id,
+        name,
+        rating: 0,
+        createdAt: new Date().toISOString()
+      }
     })
+
+    console.log(standardsInserted)
+    return Model.batchPut(standardsInserted)
   }
 
   async getAll (companyId: string): Promise<Standard[]> {
-    return StandardModel.query('pk')
+    return Model.query('pk')
     .eq(`${COMPANY_PK}#${companyId}`)
     .where('sk')
     .beginsWith(`${STANDARD_SK}`)
@@ -28,7 +32,7 @@ export class StandardRepository implements IStandardRepository {
   }
 
   async update (companyId: string, { rating, id: standardId }: Standard): Promise<Standard> {
-    return StandardModel.update({
+    return Model.update({
       pk: `${COMPANY_PK}#${companyId}`,
       sk: `${STANDARD_SK}#${standardId}`
     }, {

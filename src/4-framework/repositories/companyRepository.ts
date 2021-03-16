@@ -1,5 +1,5 @@
 import { Service } from 'typedi'
-import { CompanyModel } from '#framework/models/companyModel'
+import { Model } from '#framework/models/model'
 import { ICompanyRepository, ICompanyRepositoryToken } from '#application/repositories/iCompanyRepository'
 import { Company } from '#enterprise/domain/company'
 
@@ -9,7 +9,7 @@ export const COMPANY_SK = 'DETAILS'
 @Service({ id: ICompanyRepositoryToken })
 export class CompanyRepository implements ICompanyRepository {
   async updateComplianceAssessed (id: string): Promise<Company> {
-    return CompanyModel.update({
+    return Model.update({
       pk: `${COMPANY_PK}#${id}`,
       sk: `${COMPANY_SK}`
     }, {
@@ -17,7 +17,7 @@ export class CompanyRepository implements ICompanyRepository {
     })
   }
   async create ({ id, name, email, cnpj, startHire, endHire }: Company): Promise<Company> {
-    return CompanyModel.create({
+    return Model.create({
       pk: `${COMPANY_PK}#${id}`,
       sk: `${COMPANY_SK}`,
       id,
@@ -30,14 +30,14 @@ export class CompanyRepository implements ICompanyRepository {
   }
 
   async delete (id: string): Promise<void> {
-    return CompanyModel.delete({
+    return Model.delete({
       pk: `${COMPANY_PK}#${id}`,
       sk: `${COMPANY_SK}`
     })
   }
 
   async getAll (): Promise<Company[]> {
-    return CompanyModel.scan({
+    return Model.scan({
       pk: {
         'begins_with': `${COMPANY_PK}`
       },
@@ -50,7 +50,7 @@ export class CompanyRepository implements ICompanyRepository {
   }
 
   async get (companyId: string): Promise<Company> {
-    return CompanyModel.queryOne('pk').eq(`${COMPANY_PK}#${companyId}`).where('sk').eq(COMPANY_SK).exec()
+    return Model.queryOne('pk').eq(`${COMPANY_PK}#${companyId}`).where('sk').eq(COMPANY_SK).exec()
   }
 
 }

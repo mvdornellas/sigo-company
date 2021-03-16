@@ -1,13 +1,12 @@
 import { BaseDataSchema, BaseKeySchema } from '#framework/models/baseModel'
 import dynamoose, { ModelConstructor, Schema, SchemaAttributes } from 'dynamoose'
-import { Company } from '#enterprise/domain/company'
 
-export type CompanyDataSchema = BaseDataSchema<Company>
-export type CompanyKeySchema = BaseKeySchema
+export type ModelDataSchema = BaseDataSchema<any>
+export type ModelKeySchema = BaseKeySchema
 
-export type CompanySchema = ModelConstructor<
-  CompanyDataSchema,
-  CompanyKeySchema
+export type ModelSchema = ModelConstructor<
+  ModelDataSchema,
+  ModelKeySchema
 >
 
 const schema = {
@@ -23,37 +22,42 @@ const schema = {
   },
   id: {
     type: String,
-    required: true
+    required: false
   },
   name: {
     type: String,
-    required: true
+    required: false
   },
   cnpj: {
     type: Number,
-    required: true
+    required: false
   },
   email: {
     type: String,
-    required: true
+    required: false
   },
   startHire: {
     type: String,
-    required: true,
+    required: false,
     default: new Date()
   },
   endHire: {
     type: String,
-    required: true
+    required: false
   },
   complianceAssessed: {
     type: Boolean,
     required: false,
     default: false
   },
+  rating: {
+    type: Number,
+    required: false
+  },
   createdAt: {
     type: String,
-    default: new Date()
+    default: new Date(),
+    required: false
   },
   updatedAt: {
     type: String,
@@ -61,9 +65,9 @@ const schema = {
   }
 } as SchemaAttributes
 
-export const CompanyModel: CompanySchema = dynamoose.model<
-  CompanyDataSchema,
-  CompanyKeySchema>(
+export const Model: ModelSchema = dynamoose.model<
+  ModelDataSchema,
+  ModelKeySchema>(
     'SIGO',
     new Schema(schema, {
       timestamps: true,

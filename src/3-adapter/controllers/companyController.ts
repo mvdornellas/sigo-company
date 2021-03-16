@@ -9,7 +9,6 @@ import { OutputBase } from '#adapter/outputBase'
 import { CreateCompanyOutput } from '#adapter/serializers/company/createOutput'
 import _ from 'lodash'
 import { CreateStandardUseCase } from '#application/useCases/standard/createUseCase'
-import { StandardDto } from '#application/dto/standard'
 @Service()
 export class CompanyController {
   @Inject() private readonly createCompanyUseCase!: CreateCompanyUseCase
@@ -22,13 +21,11 @@ export class CompanyController {
     try {
       console.info(`[I] COMPANY CREATE INPUT`, input)
       const { company, standards } = input
+      await this.createStandardUseCase.run({
+        companyId: company.id,
+        standards
+      })
       const companyCreated = await this.createCompanyUseCase.run(new CompanyDto(company))
-      for (const standard of standards) {
-        await this.createStandardUseCase.run({
-          companyId: companyCreated.id,
-          standard: new StandardDto(standard)
-        })
-      }
       return new OutputBase<CreateCompanyOutput>({
         data: new CreateCompanyOutput({ company: companyCreated })
       })
