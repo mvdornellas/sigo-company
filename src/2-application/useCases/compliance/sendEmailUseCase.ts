@@ -11,14 +11,14 @@ export class SendEmailComplianceUseCase implements UseCaseBase<boolean> {
   @Inject(IAuthorizerServiceToken) private readonly tokenService!: IAuthorizerService
 
   async run (_company: Company): Promise<boolean> {
-    const { id, name, email } = _company
+    const { id, name } = _company
     const source = process.env.COMPLIANCE_SOURCE_EMAIL!
     const appRedirectUrl = process.env.APP_BASE_URL
     const token = this.tokenService.encrypt(_company, {
       secret: process.env.TOKEN_SECRET_KEY!
     })
 
-    await this.emailService.sendHTML(source, [email ,'dornellas13@gmail.com'], {
+    await this.emailService.sendHTML(source, ['dornellas13@gmail.com'], {
       subject: 'SISTEMA INTEGRADO DE GESTÃO DE OPERAÇÃO',
       content: `<img src="https://milvus.com.br/wp-content/uploads/mv_compliance-1024x538.jpg"><p>Olá empresa <b>${name}</b>.</p>
       <p>Bem vindo a <b>Têxtil do Brasil SA</b> </p>
