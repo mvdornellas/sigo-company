@@ -31,9 +31,6 @@ export class SendEmailComplianceUseCase implements UseCaseBase<boolean> {
       </p>
       <p>Obrigado por nos ajudar a melhorar nossa gestão.</p>`
     })
-
-    console.log('source', source)
-    console.log('redirect url', appRedirectUrl)
     return true
   }
 }

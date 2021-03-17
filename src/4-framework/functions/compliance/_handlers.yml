@@ -17,29 +17,25 @@ getCompanyCompliance:
           cors: true 
           authorizer:
             arn: arn:aws:lambda:#{AWS::Region}:#{AWS::AccountId}:function:sigo-cross-cutting-dev-tokenAuthorizer
-            type: request
-            identitySource: method.request.querystring.token
+            type: token
+            identitySource: method.request.header.Authorization
           request:
             parameters:
               paths:
                 companyId: true
-              queryStrings:
-                token: true 
 
 assessCompanyCompliance:
     handler: ${self:custom.functionsDirectory}/compliance/assess.handler
     events:
       - http:
           path: companies/{companyId}/compliance
-          method: PUT
+          method: POST
           cors: true  
-          authorizer:
-            arn: arn:aws:lambda:#{AWS::Region}:#{AWS::AccountId}:function:sigo-cross-cutting-dev-tokenAuthorizer
-            type: request
-            identitySource: method.request.querystring.token
+          # authorizer:
+          #   arn: arn:aws:lambda:#{AWS::Region}:#{AWS::AccountId}:function:sigo-cross-cutting-dev-tokenAuthorizer
+          #   type: token
+          #   identitySource: method.request.header.Authorization
           request:
             parameters:
               paths:
                 companyId: true
-              queryStrings:
-                token: true
