@@ -32,15 +32,6 @@ export class ComplianceController {
   async get (id: string): Promise<OutputBase<ComplianceCompanyOutput>> {
     try {
       const company = await this.getCompanyUseCase.run(id)
-      if (company.complianceAssessed) {
-        return new OutputBase({
-          success: false,
-          errors: [{
-            code: 'COMPLIANCE_ALREADY_ASSESSED',
-            message: 'Compliance Already Assessed'
-          }] as ApplicationError[]
-        })
-      }
       const standards = await this.getAllStandardUseCase.run(id)
       console.info('[I] GET ALL STANDARDS FROM COMPLIANCE DATA', standards)
       return new OutputBase<ComplianceCompanyOutput>({
