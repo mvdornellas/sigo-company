@@ -37,3 +37,14 @@ assessCompanyCompliance:
             parameters:
               paths:
                 companyId: true
+
+complianceDashboard:
+    handler: ${self:custom.functionsDirectory}/compliance/dashboard.handler
+    events:
+      - http:
+          path: companies/compliance/dashboard
+          method: GET
+          cors: true  
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId: ${ssm:restApiCognitoAuthorizerId}

@@ -1,3 +1,4 @@
+import { StandardDto } from '#application/dto/standard'
 export class CompanyDto {
   id!: string
   name!: string
@@ -6,6 +7,7 @@ export class CompanyDto {
   startHire!: string
   endHire!: string
   complianceAssessed!: boolean
+  standards?: StandardDto[]
   createdAt?: string
   updatedAt?: string
 

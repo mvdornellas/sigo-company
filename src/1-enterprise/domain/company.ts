@@ -1,3 +1,4 @@
+import { Standard } from './standard'
 import { Entity } from '#enterprise/domain/entity'
 
 export class Company extends Entity {
@@ -7,6 +8,7 @@ export class Company extends Entity {
   startHire!: string
   endHire!: string
   complianceAssessed?: boolean
+  standards?: Standard[]
   createdAt?: string
   updatedAt?: string
 

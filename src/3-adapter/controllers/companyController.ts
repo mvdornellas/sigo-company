@@ -2,7 +2,7 @@ import { CompanyDto } from '#application/dto/company'
 import { Service } from 'typedi/decorators/Service'
 import { Inject } from 'typedi'
 import { CreateCompanyUseCase } from '#application/useCases/company/createUseCase'
-import { GetAllCompanyUseCase } from '#application/useCases/company/getAllUseCase'
+import { GetAllCompanyDetailsUseCase } from '#application/useCases/company/getAllDetailsUseCase'
 import { CreateCompanyInput } from '#adapter/serializers/company/createInput'
 import { GetAllCompanyOutput } from '#adapter/serializers/company/getAllOutput'
 import { OutputBase } from '#adapter/outputBase'
@@ -13,7 +13,7 @@ import { CreateStandardUseCase } from '#application/useCases/standard/createUseC
 export class CompanyController {
   @Inject() private readonly createCompanyUseCase!: CreateCompanyUseCase
 
-  @Inject() private readonly getAllCompanyUseCase!: GetAllCompanyUseCase
+  @Inject() private readonly getAllCompanyDetailsUseCase!: GetAllCompanyDetailsUseCase
 
   @Inject() private readonly createStandardUseCase!: CreateStandardUseCase
 
@@ -41,10 +41,10 @@ export class CompanyController {
 
   async getAll (): Promise<OutputBase<GetAllCompanyOutput[]>> {
     try {
-      const companies = await this.getAllCompanyUseCase.run()
+      const companies = await this.getAllCompanyDetailsUseCase.run()
       console.info('[I] COMPANIES DATA', companies)
       return new OutputBase({
-        data: _.sortBy(companies,['name'],['asc']).map(company => new GetAllCompanyOutput(company))
+        data: companies.map(company => new GetAllCompanyOutput(company))
       })
     } catch (error) {
       console.error(`[E] GET ALL COMPANY`, error)

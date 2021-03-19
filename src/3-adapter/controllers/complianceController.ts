@@ -1,4 +1,4 @@
-import { ApplicationError, OutputBase } from '#adapter/outputBase'
+import { OutputBase } from '#adapter/outputBase'
 import { ComplianceCompanyOutput } from '#adapter/serializers/compliance/complianceOutput'
 import { SendEmailComplianceInput } from '#adapter/serializers/compliance/sendEmailInput'
 import { GetCompanyUseCase } from '#application/useCases/company/getUseCase'
@@ -7,8 +7,10 @@ import { GetAllStandardUseCase } from '#application/useCases/standard/getAllUseC
 import { Company } from '#enterprise/domain/company'
 import { Inject, Service } from 'typedi'
 import { UpdateStandardUseCase } from '#application/useCases/standard/updateUseCase'
-import { UpdateComplianceAssessedUseCase } from '#application/useCases/company/complianceAssessed'
+import { UpdateComplianceAssessedUseCase } from '#application/useCases/compliance/assessed'
 import { AssessInput } from '#adapter/serializers/compliance/assessInput'
+import { GetAllCompanyUseCase } from '#application/useCases/company/getAllCompanyUseCase'
+import { GetAllCompanyOutput } from '#adapter/serializers/company/getAllOutput'
 
 @Service()
 export class ComplianceController {
@@ -17,6 +19,7 @@ export class ComplianceController {
   @Inject() private readonly sendEmailComplianceUseCase!: SendEmailComplianceUseCase
   @Inject() private readonly getCompanyUseCase!: GetCompanyUseCase
   @Inject() private readonly updateComplianceAssessedUseCase!: UpdateComplianceAssessedUseCase
+  @Inject() private readonly getAll!: GetAllCompanyUseCase
 
   async sendEmail (input: SendEmailComplianceInput): Promise<boolean> {
     const { email } = input
@@ -67,5 +70,22 @@ export class ComplianceController {
         errors: error
       })
     }
+  }
+
+  async getAllCompanyItems (): Promise<any> {
+    try {
+      const companies = await this.getAll.run()
+      console.info('[I] COMPANIES DATA', companies)
+      return new OutputBase({
+        data: companies.map(company => new GetAllCompanyOutput(company))
+      })
+    } catch (error) {
+      console.error(`[E] GET ALL COMPANY`, error)
+      return new OutputBase({
+        success: false,
+        errors: error
+      })
+    }
+
   }
 }

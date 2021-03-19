@@ -3,7 +3,8 @@ import { Token } from 'typedi/Token'
 
 export interface ICompanyRepository {
   create (company: Company): Promise<Company>
-  getAll (): Promise<Company[]>
+  getAllDetails (): Promise<Company[]>
+  getAllItems (): Promise<Company[]>
   get (companyId: string): Promise<Company>
   delete (id: string): Promise<void>
   updateComplianceAssessed (id: string): Promise<Company>

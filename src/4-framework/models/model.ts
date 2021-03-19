@@ -38,8 +38,7 @@ const schema = {
   },
   startHire: {
     type: String,
-    required: false,
-    default: new Date()
+    required: false
   },
   endHire: {
     type: String,
@@ -47,8 +46,7 @@ const schema = {
   },
   complianceAssessed: {
     type: Boolean,
-    required: false,
-    default: false
+    required: false
   },
   rating: {
     type: Number,
