@@ -1,6 +1,7 @@
 create:
     handler: ${self:custom.functionsDirectory}/company/create.handler
     environment:
+      SEND_COMPLIANCE_EMAIL_ENABLED: false
       COMPANY_CREATED_SNS: arn:aws:sns:#{AWS::Region}:#{AWS::AccountId}:${self:custom.company.sns.name} 
     events:
       - http:

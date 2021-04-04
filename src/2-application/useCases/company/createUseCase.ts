@@ -16,10 +16,20 @@ export class CreateCompanyUseCase implements UseCaseBase<CompanyDto> {
     console.info('[I] COMPANY CREATE DTO DATA', companyDto)
     const companyCreated = await this.companyRepository.create(new Company(companyDto))
     console.info('[I] COMPANY CREATED DATA', JSON.stringify(companyCreated))
-    const notification = await this.notificationService.send(JSON.stringify({
-      ...companyCreated
-    }))
-    console.info('[I] NOTIFICATION COMPANY CREATED SENDED', notification)
+
+    let sendComplianceEmailEnabled = false
+    try {
+      sendComplianceEmailEnabled = JSON.parse(process.env.SEND_COMPLIANCE_EMAIL_ENABLED!.toLowerCase())
+    } catch (error) {
+      sendComplianceEmailEnabled = false
+    }
+
+    if (sendComplianceEmailEnabled) {
+      const notification = await this.notificationService.send(JSON.stringify({
+        ...companyCreated
+      }))
+      console.info('[I] NOTIFICATION COMPANY CREATED SENDED', notification)
+    }
     return companyDto
   }
 }
