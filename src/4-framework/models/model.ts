@@ -66,10 +66,11 @@ const schema = {
 export const Model: ModelSchema = dynamoose.model<
   ModelDataSchema,
   ModelKeySchema>(
-    'SIGO',
+    'Companies',
     new Schema(schema, {
       timestamps: true,
       saveUnknown: true,
-      useDocumentTypes: false
+      useDocumentTypes: false,
+      throughput: 'ON_DEMAND'
     })
   )
